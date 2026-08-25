@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: cinecraft-api
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11
+      - key: MONGODB_URI
+        fromDatabase:
+          name: cinecraft-db
+          property: connectionString
+      - key: MONGODB_DATABASE
+        value: cinecraft
+      - key: AI_PROVIDER
+        value: mock
+      - key: VECTOR_PROVIDER
+        value: memory
+      - key: CORS_ORIGINS
+        value: "*"
+
+databases:
+  - name: cinecraft-db
+    plan: free
+    region: oregon
